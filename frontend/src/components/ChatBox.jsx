@@ -14,6 +14,12 @@ function ChatBox() {
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
 
+  // Determine API URL based on environment
+  const API_URL =
+    import.meta.env.MODE === "development"
+      ? "http://localhost:5000"
+      : import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, modalStep, loading]);
@@ -25,7 +31,7 @@ function ChatBox() {
     setMessages((prev) => [...prev, userMsg]);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/ai/ask", {
+      const res = await axios.post(`${API_URL}/api/ai/ask`, {
         question: input,
       });
 
@@ -75,9 +81,8 @@ function ChatBox() {
   const handleConfirmPurchase = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/gold/buy", {
-        user: "demo-user",
-        amount: Number(quantity),
+      const res = await axios.post(`${API_URL}/api/gold/buy`, {
+        quantity: Number(quantity),
       });
 
       const totalCost = Number(quantity) * GOLD_RATE;

@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-// Load env variables
 dotenv.config();
 
 import express from "express";
@@ -11,7 +10,12 @@ import goldRoutes from "./routes/goldRoutes.js";
 const app = express();
 
 // Middlewares
-app.use(cors());
+app.use(
+  cors({
+    origin: [process.env.CLIENT_URL, "http://localhost:5173"], // allow both local dev & deployed frontend
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // Routes

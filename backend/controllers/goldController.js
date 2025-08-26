@@ -3,10 +3,10 @@ import GoldPurchase from "../models/GoldPurchase.js";
 // Buy Gold Controller
 export const buyGold = async (req, res) => {
   try {
-    const { amount } = req.body; // frontend sends amount
+    const { quantity } = req.body; // frontend sends quantity
 
-    if (!amount || amount <= 0) {
-      return res.status(400).json({ message: "Invalid gold amount" });
+    if (!quantity || quantity <= 0) {
+      return res.status(400).json({ message: "Invalid gold quantity" });
     }
 
     // Current date and time
@@ -15,7 +15,7 @@ export const buyGold = async (req, res) => {
     const time = now.toTimeString().split(" ")[0]; // "HH:mm:ss"
 
     const newPurchase = new GoldPurchase({
-      quantity: amount,
+      quantity,
       date,
       time,
       modeOfPayment: "Digital",
@@ -25,7 +25,7 @@ export const buyGold = async (req, res) => {
 
     res.status(201).json({
       message: "Gold purchase successful",
-      purchase: newPurchase
+      purchase: newPurchase,
     });
   } catch (error) {
     console.error("Gold Purchase Error:", error);
